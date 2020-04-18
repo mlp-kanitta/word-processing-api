@@ -33,5 +33,14 @@ class WordProcessingApi2ApplicationTests {
 	{
 	    assertEquals("skcihc   ynam  sah  neh a".toLowerCase(), TextUtils.revertAndConvertSpaceToNumber("a1hen2has2many3chicks"));
 	}
+	
+	@Test
+	public void testContainsSpecialCharacter() 
+	{
+		assertEquals(false, TextUtils.containsSpecialCharacter("TEXT INPUT"));
+	    assertEquals(true, TextUtils.containsSpecialCharacter("a1hen2has2many3chicks"));
+	    assertEquals(true, TextUtils.containsSpecialCharacter("Afsdsfdsfds"));
+	    assertEquals(true, TextUtils.containsSpecialCharacter("TEXT14520"));
+	}
 
 }

@@ -4,6 +4,8 @@
 package com.wpa.utils;
 
 import java.util.Base64;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author Kanitta Moonlapong
@@ -21,7 +23,7 @@ public class TextUtils {
 		return decodedText;
 
 	}
-	
+
 	public static String encodeBase64(String text) {
 
 		// Get decode text
@@ -34,9 +36,16 @@ public class TextUtils {
 	}
 
 	public static boolean containsSpecialCharacter(String inputStr) {
-		return ((!inputStr.equals("")) && (inputStr != null) && (inputStr.matches("^[A-Z]*$")));
+		// return !inputStr.matches("/^([A-Z]+\\s)*[A-Z]+$/");
+
+		Pattern pattern = Pattern.compile(new String("^[A-Z\\s]*$"));
+		Matcher matcher = pattern.matcher(inputStr);
+		if (matcher.matches()) {
+			return false;
+		}
+		return true;
 	}
-	
+
 	public static String convertSpaceToNumber(String inputStr) {
 		// TODO: check if string contains space
 		StringBuffer outputStr = new StringBuffer();
@@ -57,21 +66,20 @@ public class TextUtils {
 		}
 		return outputStr.toString();
 	}
-	
+
 	public static String revertAndConvertSpaceToNumber(String inputStr) {
 		StringBuilder outputStr = new StringBuilder();
-		
+
 		for (int index = inputStr.length() - 1; index >= 0; index--) {
 			if (Character.isDigit(inputStr.charAt(index))) {
-				/*if (((index + 1) < inputLength) && Character.isWhitespace(inputStr.charAt(index + 1))) {
-					spCounter += 1;
-				} else {
-					outputStr.append(String.valueOf(spCounter));
-					spCounter = 1;
-				}*/
+				/*
+				 * if (((index + 1) < inputLength) &&
+				 * Character.isWhitespace(inputStr.charAt(index + 1))) { spCounter += 1; } else
+				 * { outputStr.append(String.valueOf(spCounter)); spCounter = 1; }
+				 */
 				// return inputStr;
 
-				for(int i=0; i<Character.getNumericValue(inputStr.charAt(index));  i++) {
+				for (int i = 0; i < Character.getNumericValue(inputStr.charAt(index)); i++) {
 					outputStr.append(" ");
 				}
 			} else {

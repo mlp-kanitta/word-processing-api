@@ -9,37 +9,14 @@ package com.wpa.model;
  */
 public class WordProcessingModel {
 
-	private String encodedText;
 	private String result;
-	private String errorMsg;
 
-	public WordProcessingModel(String encodedText) {
-		super();
-		this.encodedText = encodedText;
-	}
-
-	public String getEncodedText() {
-		return encodedText;
-	}
-
-	public void setEncodedText(String encodedText) {
-		this.encodedText = encodedText;
-	}
-
-	public String getDecodedText() {
+	public String getResult() {
 		return result;
 	}
 
-	public void setDecodedText(String decodedText) {
-		this.result = decodedText;
-	}
-
-	public String getErrorMsg() {
-		return errorMsg;
-	}
-
-	public void setErrorMsg(String errorMsg) {
-		this.errorMsg = errorMsg;
+	public void setResult(String result) {
+		this.result = result;
 	}
 	
 	

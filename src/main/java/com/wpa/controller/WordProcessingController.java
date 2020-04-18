@@ -3,10 +3,15 @@
  */
 package com.wpa.controller;
 
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.wpa.model.WordProcessingModel;
 import com.wpa.utils.TextUtils;
@@ -17,7 +22,9 @@ import com.wpa.utils.TextUtils;
  */
 @RestController
 public class WordProcessingController {
-
+	
+	private static String ERR_PARAM_REQUIRES = "Parameter 'funStr' is requires.";
+	private static String ERR_SPECIAL_CHAR_FOUND = "Only english alphabet with capital letter allows.";
 	/**
 	 * 
 	 */
@@ -26,16 +33,17 @@ public class WordProcessingController {
 	}
 
 	// The API will receive 1 string parameter, namely “funnyStr”
-	@RequestMapping(value = "/wpapi/funStr/{funStr}", method = RequestMethod.GET)
-	public WordProcessingModel getFunStr(@PathVariable("funStr") String funStr) {
-		WordProcessingModel word = new WordProcessingModel(funStr);
-		if (null == funStr) {
-			word.setErrorMsg("parameter 'funStr' is requires.");
-			return word;
+	@RequestMapping(value = "/wpapi", method = RequestMethod.GET)
+	public WordProcessingModel getFunStr(@RequestParam String funStr, HttpServletResponse response) {
+		WordProcessingModel word = new WordProcessingModel();
+		if (!(null != funStr && funStr.length() > 0)) {
+			throw new ResponseStatusException(
+			           HttpStatus.BAD_REQUEST, ERR_PARAM_REQUIRES);
+
 		}
 
 		// The parameter will be encoded with Base64
-		String originalStr = word.getEncodedText();
+		String originalStr = funStr;
 		// Decode BASE64
 		String decodedText;
 
@@ -46,8 +54,8 @@ public class WordProcessingController {
 		// After decoding, API will only accept English Capital Letter. If not, reject
 		// and throw error message, 
 		if (TextUtils.containsSpecialCharacter(decodedText)) {
-			word.setErrorMsg("Only English Capital Letter is allows.");
-			return word;
+			throw new ResponseStatusException(
+			           HttpStatus.BAD_REQUEST, ERR_SPECIAL_CHAR_FOUND);
 		}
 		
 		//Convert all chars to lower cases
@@ -57,34 +65,10 @@ public class WordProcessingController {
 		String revertedText = TextUtils.revertAndConvertSpaceToNumber(convertedText);
 		//Encode the result with based64 and return back to the caller.
 		String encodedText = TextUtils.encodeBase64(revertedText);
-		word.setDecodedText(encodedText);
-		// To lowercase
+		word.setResult(encodedText);
 
-		// Encode with space counting
-
-		// Revert
-
-		// Encode to BASE64
 		return word;
 
 	}
 }
 
-/*
- * 2. The API will receive 1 string parameter, namely “funnyStr”
- * 
- * 3. The parameter will be encoded with Base64
- * 
- * 4. The API will work as below :-
- * 
- * 4a). API received based64 encoded parameter named “funnyStr”
- * 
- * 4b). Decode the based64 to plain string
- * 
- * 4c). After decoding, API will only accept English Capital Letter. If not,
- * reject and throw error message, or otherwise, convert all chars to lower
- * cases
- * 
- * 4d). White space will be turned to the number of spaces as counted. (Do not
- * skip this step. We’ll check the code.)
- */
