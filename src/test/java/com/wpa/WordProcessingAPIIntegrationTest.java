@@ -35,10 +35,10 @@ class WordProcessingAPIIntegrationTest {
 	@Autowired
 	private TestRestTemplate restTemplate;
 
-	@Test
 	/*
 	 * //"THE WORLD" "VEhFIFdPUkxE"
 	 */
+	@Test
 	public void testCase1() throws RestClientException, MalformedURLException {
 
 		String funStr = "VEhFIFdPUkxE";
@@ -51,10 +51,10 @@ class WordProcessingAPIIntegrationTest {
 		assertThat(response.getBody()).isEqualTo("{\"result\":\"ZGxyb3cgZWh0\"}");
 	}
 	
-	@Test
 	/*
 	 *"A HEN  HAS  MANY   CHICKS"
 	 */
+	@Test
 	public void testCase2() throws RestClientException, MalformedURLException {
 
 		String funStr = "QSBIRU4gIEhBUyAgTUFOWSAgIENISUNLUw==";
@@ -74,6 +74,7 @@ class WordProcessingAPIIntegrationTest {
 	 * @throws MalformedURLException
 	 * Exception testing
 	 */
+	@Test
 	public void testCase3() throws RestClientException, MalformedURLException {
 
 
@@ -81,7 +82,7 @@ class WordProcessingAPIIntegrationTest {
 				.getForEntity(new URL("http://localhost:" + port + "/wpapi?funStr=" + "").toString(), String.class);
 
 		
-		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
 }
