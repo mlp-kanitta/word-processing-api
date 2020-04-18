@@ -6,7 +6,6 @@ package com.wpa.controller;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -58,12 +57,8 @@ public class WordProcessingController {
 			           HttpStatus.BAD_REQUEST, ERR_SPECIAL_CHAR_FOUND);
 		}
 		
-		//Convert all chars to lower cases
-		//White space will be turned to the number of spaces as counted. 
-		String convertedText = TextUtils.convertSpaceToNumber(decodedText.toLowerCase());
-		//Result to return is the string swap from back to front and leave space between words equal to the number for each space.
-		String revertedText = TextUtils.revertAndConvertSpaceToNumber(convertedText);
-		//Encode the result with based64 and return back to the caller.
+		String revertedText = TextUtils.processText(decodedText);
+		
 		String encodedText = TextUtils.encodeBase64(revertedText);
 		word.setResult(encodedText);
 

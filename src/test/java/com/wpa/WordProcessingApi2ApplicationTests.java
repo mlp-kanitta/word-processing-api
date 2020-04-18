@@ -3,18 +3,14 @@ package com.wpa;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.wpa.utils.TextUtils;
 
-@SpringBootTest
+@ExtendWith(SpringExtension.class)
 class WordProcessingApi2ApplicationTests {
-
-	@Test
-	void contextLoads() {
-	}
 	
-
 	@Test
 	public void textConvertSpaceToNumber() 
 	{
@@ -35,12 +31,26 @@ class WordProcessingApi2ApplicationTests {
 	}
 	
 	@Test
+	/*
+	 * Check if input contains only English capital
+	 */
 	public void testContainsSpecialCharacter() 
 	{
 		assertEquals(false, TextUtils.containsSpecialCharacter("TEXT INPUT"));
 	    assertEquals(true, TextUtils.containsSpecialCharacter("a1hen2has2many3chicks"));
 	    assertEquals(true, TextUtils.containsSpecialCharacter("Afsdsfdsfds"));
 	    assertEquals(true, TextUtils.containsSpecialCharacter("TEXT14520"));
+	}
+	
+	@Test
+	/*
+	 * @input English capital case only
+	 * @output Reverted lower case text
+	 */
+	public void testProcessText() 
+	{
+		assertEquals("dlrow eht", TextUtils.processText("THE WORLD"));
+	    assertEquals("skcihc   ynam  sah  neh a", TextUtils.processText("A HEN  HAS  MANY   CHICKS"));
 	}
 
 }
